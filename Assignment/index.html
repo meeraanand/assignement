@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+		<script src="https://code.highcharts.com/highcharts.js"></script>
+		<script src="https://code.highcharts.com/highcharts-more.js"></script>
+		<script type="text/javascript" src="coordinates.json"></script>
+
+	</head>
+	<body>
+		<div id="container" style="height: 400px; min-width: 310px; max-width: 900px; margin: 0 auto"></div>
+		<script type="text/javascript">
+			function getJsonData(jsonData){
+					var dataArray = [],
+						data = jsonData;
+					
+					for(i=0; i < data.length; i++){
+						dataArray.push({
+							'x' : parseInt(data[i].value.split(',')[0]),
+							'y' : parseInt(data[i].value.split(',')[1]),
+							'name' : data[i].id
+						});
+					}
+					
+					return dataArray;
+				};
+			$(function () {
+				
+				
+				$('#container').highcharts({
+					chart: {
+						type: 'scatter',
+						zoomType: 'xy'
+					},
+					legend: {
+						enabled: false
+					},
+					title: {
+						text: 'Cartesian Plane'
+					},
+					subtitle: {
+						text: 'Closest-to-Farthest'
+					},
+
+					xAxis: {
+						gridLineWidth: 1,
+						title: {
+							text: 'x-axis'
+						},
+						labels: {
+							format: '{value}'
+						}
+					},
+
+					yAxis: {
+						startOnTick: false,
+						endOnTick: false,
+						title: {
+							text: 'y-axis'
+						},
+						labels: {
+							format: '{value}'
+						},
+						maxPadding: 0.2
+					},
+
+					tooltip: {
+						useHTML: true,
+						headerFormat: '<table>',
+						pointFormat: '<tr><th>Alphabet:</th><td>{point.name}</td></tr>' +
+							'<tr><th>x-axis coordinate:</th><td>{point.x}</td></tr>' +
+							'<tr><th>y-axis coordinate:</th><td>{point.y}</td></tr>',
+						footerFormat: '</table>',
+						followPointer: true
+					},
+
+					plotOptions: {
+						series: {
+							dataLabels: {
+								enabled: true,
+								format: '{point.name}'
+							}
+						}
+					},
+
+					series: [{
+						data: getJsonData(window.coordinatesJson)
+					}],
+					
+					credits: {
+						enabled: false
+					}
+
+				});
+			});
+		</script>
+	</body>
+</html>
